@@ -56,21 +56,16 @@ Jobs queue up automatically, and an interrupted job resumes where it stopped.
 
 ## How it works
 
-```mermaid
-flowchart LR
-    subgraph PC["Office PC (files stay here)"]
-        SSD[(Archive SSD)]
-    end
-    subgraph GPU["NVIDIA DGX Spark (engine)"]
-        APP[File Sorter web app]
-        OCR[Local OCR]
-        LLM[Local LLMs via Ollama]
-    end
-    U[Staff browsers] -->|http| APP
-    SSD <-->|SSH tunnel| APP
-    APP --> OCR
-    APP --> LLM
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/architecture/architecture-dark.png">
+  <img alt="File Sorter system architecture: the office PC serves the archive SSD over a localhost WebDAV server and an SSH reverse tunnel; the DGX Spark mounts it and runs the web app, job runner, pipeline phases, executor and local Ollama models" src="docs/architecture/architecture.png">
+</picture>
+
+- **Office PC:** the archive SSD never leaves it. A launcher serves the folder over WebDAV on the PC's own localhost and opens an encrypted SSH reverse tunnel to the GPU server.
+- **DGX Spark:** mounts that folder (no admin rights, no file copies) and runs everything else: the web app, the job queue, every pipeline phase, the file executor and the AI models.
+- **Results** are written back to the same SSD, next to the original archive.
+
+An interactive version (zoom, search, light/dark) is in [`docs/architecture/architecture.html`](docs/architecture/architecture.html): download it and open it in a browser.
 
 The pipeline has resumable phases. Every phase caches its progress, so a crash or cancel loses nothing:
 
