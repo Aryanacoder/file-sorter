@@ -44,13 +44,28 @@ Sorted/
 
 Staff sort archives from a **web browser**, not the command line:
 
-1. **New job:** pick the folder, then type 5–10 example products (English + Japanese names).
-2. **Analyze:** a live progress bar shows each step, with a time estimate. You can close the tab; the work continues.
-3. **Review:** check and edit the document categories and product list the AI proposes.
-4. **Plan:** see the new folder tree, accuracy scores and flagged sensitive files, and download the plan for Excel.
-5. **Apply:** copy or move the files. Existing files are never overwritten, and a move can be undone.
+1. **Open it:** one desktop icon connects the PC to the GPU server and opens the app. No password, no IP address, nothing to type.
+2. **New job:** click the drive and the folder, tick any **confidential sub-folders**, and give 5–10 example products (English + Japanese names), or let the AI suggest them. The destination folder is chosen automatically: same drive, another SSD, the PC, OneDrive, or a custom folder.
+3. **Run it phase by phase:** every phase has its own **Run / Run again / Redo / Results** buttons, and a *suggested next step* bar always shows the obvious next click.
+4. **Review:** check and edit the document categories and product list the AI proposes.
+5. **Plan:** see the new folder tree, accuracy scores and flagged sensitive files, and download the plan for Excel.
+6. **Apply:** copy or move the files. Existing files are never overwritten, and a move can be undone.
 
-Jobs queue up automatically, and an interrupted job resumes where it stopped.
+Jobs queue up automatically, and an interrupted job resumes where it stopped. Confidential sub-folders are sorted the same way but into their own separate tree, and never go to the cloud.
+
+### English and Japanese
+
+One **EN | 日本語** switch in the top bar changes the whole app: every page, the built-in guide, messages and confirmations.
+
+### Monitoring the AI server
+
+A live dashboard shows the GPU server itself:
+
+- GPU load, temperature, power, unified memory and CPU, with 1 h / 6 h / 24 h charts.
+- **Which AI model is working right now**, which are loaded in memory (and when they free it), and which are installed.
+- A **Test** button per model that proves it loads and answers, and measures its speed.
+- Other AI services sharing the server, with a warning when they leave too little memory.
+- An activity log (who did what, when), quality and accuracy per job, and the raw logs.
 
 ---
 
@@ -61,7 +76,7 @@ Jobs queue up automatically, and an interrupted job resumes where it stopped.
   <img alt="File Sorter system architecture: the office PC serves the archive SSD over a localhost WebDAV server and an SSH reverse tunnel; the DGX Spark mounts it and runs the web app, job runner, pipeline phases, executor and local Ollama models" src="docs/architecture/architecture.png">
 </picture>
 
-- **Office PC:** the archive SSD never leaves it. A launcher serves the folder over WebDAV on the PC's own localhost and opens an encrypted SSH reverse tunnel to the GPU server.
+- **Office PC:** the archive SSD never leaves it. A desktop icon finds the GPU server by name (so a changed IP address doesn't matter), serves the drives over WebDAV on the PC's own localhost, opens an encrypted SSH reverse tunnel, and reconnects by itself if the link drops.
 - **DGX Spark:** mounts that folder (no admin rights, no file copies) and runs everything else: the web app, the job queue, every pipeline phase, the file executor and the AI models.
 - **Results** are written back to the same SSD, next to the original archive.
 
@@ -103,7 +118,8 @@ Every archive holds a different product family, so nothing about the domain is h
 | OCR | RapidOCR PP-OCRv5 (Japanese, Chinese, English), CPU |
 | Parsing | PyMuPDF, python-docx, python-pptx, openpyxl |
 | Backend | Python 3, Flask, subprocess job runner |
-| Frontend | Plain HTML/CSS/JS: no build step, light and dark mode, mobile-friendly |
+| Frontend | Plain HTML/CSS/JS: no build step, English/Japanese switch, light and dark mode, mobile-friendly |
+| Monitoring | nvidia-smi, Ollama API and /proc sampled every 10 s, with charts in the browser |
 | Storage link | rclone (WebDAV) over an SSH reverse tunnel: the files stay on the office PC |
 
 ## Safety by design
