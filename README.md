@@ -45,7 +45,7 @@ Sorted/
 Staff sort archives from a **web browser**, not the command line:
 
 1. **Open it:** one desktop icon connects the PC to the GPU server and opens the app. No password, no IP address, nothing to type.
-2. **New job:** click the drive and the folder, tick any **confidential sub-folders**, and give 5–10 example products (English + Japanese names), or let the AI suggest them. The destination folder is chosen automatically: same drive, another SSD, the PC, OneDrive, or a custom folder.
+2. **New job:** paste the path of the archive folder (in Explorer: right-click → *Copy as path*) and it is checked at once. Tick any **confidential sub-folders**, and give 5–10 example products (English + Japanese names), or let the AI suggest them. Then paste the destination folder, or pick an automatic one: same drive, another SSD, the PC, or OneDrive.
 3. **Run it phase by phase:** every phase has its own **Run / Run again / Redo / Results** buttons, and a *suggested next step* bar always shows the obvious next click.
 4. **Review:** check and edit the document categories and product list the AI proposes.
 5. **Plan:** see the new folder tree, accuracy scores and flagged sensitive files, and download the plan for Excel.
